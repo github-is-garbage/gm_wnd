@@ -27,29 +27,25 @@ bool GetMainWindow()
 	return IsWindow(hMainWindow);
 }
 
-int SetWindowTitle(lua_State* pLuaState)
+LUA_FUNCTION(SetWindowTitle)
 {
-	GarrysMod::Lua::ILuaBase* pLua = pLuaState->luabase;
-
 	if (!GetMainWindow())
 	{
-		pLua->ThrowError("Can't find main process window!");
+		LUA->ThrowError("Can't find main process window!");
 		return 0;
 	}
 
-	const char* pszWindowTitle = pLua->CheckString(1);
+	const char* pszWindowTitle = LUA->CheckString(1);
 	SetWindowTextA(hMainWindow, pszWindowTitle);
 
 	return 0;
 }
 
-int GetWindowTitle(lua_State* pLuaState)
+LUA_FUNCTION(GetWindowTitle)
 {
-	GarrysMod::Lua::ILuaBase* pLua = pLuaState->luabase;
-
 	if (!GetMainWindow())
 	{
-		pLua->ThrowError("Can't find main process window!");
+		LUA->ThrowError("Can't find main process window!");
 		return 0;
 	}
 
@@ -58,48 +54,44 @@ int GetWindowTitle(lua_State* pLuaState)
 
 	if (Length <= 0)
 	{
-		pLua->PushString("");
+		LUA->PushString("");
 		return 1;
 	}
 
-	pLua->PushString(Buffer);
+	LUA->PushString(Buffer);
 	return 1;
 }
 
 GMOD_MODULE_OPEN()
 {
-	GarrysMod::Lua::ILuaBase* pLua = LUA;
-
-	pLua->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+	LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
 	{
-		pLua->PushString("SetWindowTitle");
-		pLua->PushCFunction(SetWindowTitle);
-		pLua->RawSet(-3);
+		LUA->PushString("SetWindowTitle");
+		LUA->PushCFunction(SetWindowTitle);
+		LUA->RawSet(-3);
 
-		pLua->PushString("GetWindowTitle");
-		pLua->PushCFunction(GetWindowTitle);
-		pLua->RawSet(-3);
+		LUA->PushString("GetWindowTitle");
+		LUA->PushCFunction(GetWindowTitle);
+		LUA->RawSet(-3);
 	}
-	pLua->Pop();
+	LUA->Pop();
 
 	return 0;
 }
 
 GMOD_MODULE_CLOSE()
 {
-	GarrysMod::Lua::ILuaBase* pLua = LUA;
-
-	pLua->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
+	LUA->PushSpecial(GarrysMod::Lua::SPECIAL_GLOB);
 	{
-		pLua->PushString("SetWindowTitle");
-		pLua->PushNil();
-		pLua->RawSet(-3);
+		LUA->PushString("SetWindowTitle");
+		LUA->PushNil();
+		LUA->RawSet(-3);
 
-		pLua->PushString("GetWindowTitle");
-		pLua->PushNil();
-		pLua->RawSet(-3);
+		LUA->PushString("GetWindowTitle");
+		LUA->PushNil();
+		LUA->RawSet(-3);
 	}
-	pLua->Pop();
+	LUA->Pop();
 
 	return 0;
 }
