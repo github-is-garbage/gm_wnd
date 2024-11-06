@@ -8,19 +8,6 @@ filter("platforms:x86")
 			cppdialect("c++20")
 			architecture("x86")
 
-			-- IncludeHelpersExtended()
-			IncludeLuaShared()
-			IncludeDetouring()
-			-- IncludeScanning()
-			IncludeSDKCommon()
-			IncludeSDKTier0()
-			IncludeSDKTier1()
-			-- IncludeSDKTier2()
-			-- IncludeSDKTier3()
-			-- IncludeSDKMathlib()
-			-- IncludeSDKRaytrace()
-			-- IncludeSteamAPI()
-
 			files({
 				"./src/**.*"
 			})
@@ -32,19 +19,6 @@ filter("platforms:x64")
 		CreateProject({serverside = false, source_path = "./src", manual_files = false})
 			cppdialect("c++20")
 			architecture("x64")
-
-			-- IncludeHelpersExtended()
-			IncludeLuaShared()
-			IncludeDetouring()
-			-- IncludeScanning()
-			IncludeSDKCommon()
-			IncludeSDKTier0()
-			IncludeSDKTier1()
-			-- IncludeSDKTier2()
-			-- IncludeSDKTier3()
-			-- IncludeSDKMathlib()
-			-- IncludeSDKRaytrace()
-			-- IncludeSteamAPI()
 
 			files({
 				"./src/**.*"
