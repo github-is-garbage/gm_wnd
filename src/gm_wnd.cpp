@@ -1,64 +1,33 @@
-#define WIN32_LEAN_AND_MEAN
+#ifdef _WIN32
+#include "gm_wnd_win32.hpp"
+#else
+#include "gm_wnd_linux.hpp"
+#endif
 
 #include <GarrysMod/Lua/Interface.h>
-#include <Windows.h>
-
-HWND hMainWindow;
-
-BOOL CALLBACK EnumWindowsProc(HWND hWindow, LPARAM lpReserved)
-{
-	DWORD dwProcessID;
-	GetWindowThreadProcessId(hWindow, &dwProcessID);
-
-	if (dwProcessID != GetCurrentProcessId()) return true;
-	if (GetWindow(hWindow, GW_OWNER) != NULL) return true;
-	if (!IsWindowVisible(hWindow)) return true;
-
-	hMainWindow = hWindow;
-	return false;
-}
-
-bool GetMainWindow()
-{
-	if (IsWindow(hMainWindow)) return true;
-
-	EnumWindows(EnumWindowsProc, 0);
-
-	return IsWindow(hMainWindow);
-}
 
 LUA_FUNCTION(SetWindowTitle)
 {
-	if (!GetMainWindow())
+	if (!gmWnd::GetMainWindow())
 	{
 		LUA->ThrowError("Can't find main process window!");
 		return 0;
 	}
 
-	const char* pszWindowTitle = LUA->CheckString(1);
-	SetWindowTextA(hMainWindow, pszWindowTitle);
+	gmWnd::SetWindowTitle(LUA->CheckString(1));
 
 	return 0;
 }
 
 LUA_FUNCTION(GetWindowTitle)
 {
-	if (!GetMainWindow())
+	if (!gmWnd::GetMainWindow())
 	{
 		LUA->ThrowError("Can't find main process window!");
 		return 0;
 	}
-
-	char Buffer[256];
-	int Length = GetWindowTextA(hMainWindow, Buffer, sizeof(Buffer));
-
-	if (Length <= 0)
-	{
-		LUA->PushString("");
-		return 1;
-	}
-
-	LUA->PushString(Buffer);
+	
+	LUA->PushString(gmWnd::GetWindowTitle());
 	return 1;
 }
 
